@@ -17,18 +17,18 @@ component that will change what it displays based on state.
 
 While a React component can have initial state, the real power is in updating
 its state — after all, if we didn't need to update the state, the component
-shouldn't _have_ any state. State is only reserved for data that _changes_ in
-our component and is visible in the UI.
+shouldn't _have_ any state. **State is only reserved for data that _changes_ in
+our component and is visible in the UI**.
 
-Instead of directly modifying the state using `this.state`, we use
-`this.setState()`. This is a function available to all React components, and
-allows us to let React know that the component state has changed. This way the
+Instead of directly modifying the state using `this.state`, **we use
+`this.setState()`**. This is a function available to all React components, and
+allows us to let React know that the component state has changed. **This way the
 components knows it should re-render, because its state has changed and its UI
-will most likely also change. Using a setter function like this is very
+will most likely also change**. Using a setter function like this is very
 performant. While other frameworks like Angular.js use "dirty checking"
 (continuously checking for changes in an object) to see if a property has
-changed, React _already knows_ because we use a built-in function to let it know
-what changes we'd like to make!
+changed, **React _already knows_ because we use a built-in function to let it know
+what changes we'd like to make**!
 
 In this code along, use the src folder in this project's code to follow along.
 To run the code, make sure to `npm install & npm start` in the terminal.
@@ -46,13 +46,13 @@ class ClickityClick extends React.Component {
 
     // Define the initial state:
     this.state = {
-      hasBeenClicked: false,
+      hasBeenClicked: false
     };
   }
 
   handleClick = () => {
     // Update our state here...
-  }
+  };
 
   render() {
     return (
@@ -72,15 +72,12 @@ import ReactDOM from 'react-dom';
 
 import ClickityClick from './components/ClickityClick';
 
-ReactDOM.render(
-  <ClickityClick />,
-  document.getElementById('root')
-);
+ReactDOM.render(<ClickityClick />, document.getElementById('root'));
 ```
 
-To update our state, we use `this.setState()` and pass in an object. This object
+**To update our state, we use `this.setState()` and pass in an object. This object
 will get merged with the current state. When the state has been updated, our
-component re-renders automatically. Handy!
+component re-renders automatically**. Handy!
 
 ```js
 // src/components/ClickityClick.js
@@ -100,8 +97,8 @@ snippets above to see the rendered text change once the button is clicked.
 
 ## How State Gets Merged
 
-When updating state, we don't have to pass in the entire state, just the
-property we want to update. For example, consider the following state for our
+**When updating state, we don't have to pass in the entire state, just the
+property we want to update**. For example, consider the following state for our
 component:
 
 ```js
@@ -122,8 +119,8 @@ state:
 }
 ```
 
-One super important thing to note is that it only merges things on the first
-level. Let's say we're working on a component that lets a user fill in an
+**One super important thing to note is that it only merges things on the first
+level**. Let's say we're working on a component that lets a user fill in an
 address, and the component's state is structured like this:
 
 ```js
@@ -144,8 +141,8 @@ update it like this:
 ```js
 this.setState({
   addressInfo: {
-    city: 'New York City',
-  },
+    city: 'New York City'
+  }
 });
 ```
 
@@ -160,9 +157,9 @@ this.setState({
 }
 ```
 
-See what happened there? It _merged_ the state, but any objects get overwritten,
+See what happened there? **It _merged_ the state, but any objects get overwritten,
 because it doesn't _deeply_ merge the state with the object you pass into
-`this.setState()`. A deep merge means that the merge will happen recursively,
+`this.setState()`**. A deep merge means that the merge will happen recursively,
 leaving any unchanged properties intact. For example, consider the following
 code sample:
 
@@ -190,26 +187,26 @@ Deeply merging like this would only update the `legs` property with a value of
 `8`, but the rest of the `kitchen` and `house` objects' structure will remain
 intact.
 
-
-We can solve this using `Object.assign()` by merging the `addressInfo` object
+**We can solve this using `Object.assign()` by merging the `addressInfo` object
 with the new data ourselves:
+**
 
 ```js
 this.setState({
   addressInfo: Object.assign({}, this.state.addressInfo, {
-    city: 'New York City',
-  }),
+    city: 'New York City'
+  })
 });
 ```
 
-**Or**, we could do this using the proposed object spread operator in the next version of JS: **RECOMMENDED**
+**Or**, **we could do this using the proposed object spread operator in the next version of JS**: **RECOMMENDED**
 
 ```js
 this.setState({
   addressInfo: {
     ...this.state.addressInfo,
-    city: 'New York City',
-  },
+    city: 'New York City'
+  }
 });
 ```
 
@@ -231,10 +228,10 @@ Perfect! Just what we needed.
 
 ## Setting state is not synchronous
 
-One thing to keep in mind is that setting state is _not_ synchronous. For all
+One thing to keep in mind is that **setting state is _not_ synchronous**. For all
 intents and purposes, it might seem that way, since our components update right
-away. State updates, however, are _batched_ internally and then executed
-simultaneously whenever React feels it's appropriate. This might result in some
+away. **State updates, however, are _batched_ internally and then executed
+simultaneously whenever React feels it's appropriate**. This might result in some
 unexpected behavior. Going back to our `ClickityClick` component above, let's
 log the state after we've set it using `this.setState()`:
 
@@ -255,11 +252,11 @@ handleClick = () => {
 
 The console output says `false`... but we just set it to `true`! What is this madness?
 
-State changes, however instant they might appear, happen _asynchronously_. If we
+**State changes, however instant they might appear, happen _asynchronously_**. **If we
 want to access our new state after it has been updated, we can optionally add a
 callback as a second argument to the `this.setState()` function. This callback
 will fire once the state has been updated, ensuring that `this.state` is now the
-new, shiny updated state. In code:
+new, shiny updated state**. In code:
 
 ```js
 // src/components/ClickityClick.js
@@ -280,14 +277,15 @@ handleClick = () => {
 ![Not the same thing!](http://4.bp.blogspot.com/-YpCHzw3WdTo/UzNBI3BzYKI/AAAAAAAAJoY/S34pUkXKhUU/s1600/aaa.png)
 
 It's important to note the difference between changes in state and changes in
-props. Changes in state and/or props will both trigger a re-render of our React
-component. However, changes in state can only happen _internally_ due to
-components changing their own state. Thus, a component can trigger changes in
-its own state. 
+props. **Changes in state and/or props will both trigger a re-render of our React
+component**. **However, changes in state can only happen _internally_ due to
+components changing their own state**. \***\*Thus, a component can trigger changes in
+its own state.**
 
-A component _cannot_ change its props. Changes in props can only happen
-_externally_, meaning the parent or grandparent component changes the 
-values it passing down to its children.
+**A component _cannot_ change its props. Changes in props can only happen
+_externally_, meaning the parent or grandparent component changes the
+values it passing down to its children.**
+\*\*
 
 ## Resources
 
